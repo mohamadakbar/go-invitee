@@ -10,7 +10,7 @@ type Routes struct {
 	DB *gorm.DB
 }
 
-func (r *Routes) SetupRoutes() *gin.Engine  {
+func (r *Routes) SetupRoutes() *gin.Engine {
 
 	app := gin.Default()
 	main := app.Group("/")
@@ -28,14 +28,25 @@ func (r *Routes) SetupRoutes() *gin.Engine  {
 	products := main.Group("/")
 	{
 		products.GET("products", prodCtrl.GetAll)
-		products.POST("product",  prodCtrl.Store)
+		products.POST("product", prodCtrl.Store)
 	}
 
 	userCtrl := controllers.NewusersController(r.DB)
 	users := main.Group("/")
 	{
 		users.GET("users", userCtrl.GetAll)
-		users.GET("users/:id", userCtrl.GetById)
+		users.GET("user/:id", userCtrl.GetById)
+		users.POST("user/slug", userCtrl.GetBySlug)
+		users.POST("user", userCtrl.Store)
+	}
+
+	paketCtrl := controllers.NewpaketController(r.DB)
+	paket := main.Group("/")
+	{
+		paket.POST("paket", paketCtrl.GetPaketById)
+		//paket.GET("user/:id", paketCtrl.GetById)
+		//paket.POST("user/slug", paketCtrl.GetBySlug)
+		//paket.POST("user", paketCtrl.Store)
 	}
 
 	return app
